@@ -1,30 +1,38 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { ItemMagicoService } from './itemMagico.service';
 import { CreateItemMagicoDto } from './create-itemMagico.dto';
 import { ItemMagico } from '../interfaces/itemMagico.interface';
-import { ItemMagicoService } from './itemMagico.service';
 
 @Controller('item-magico')
 export class ItemMagicoController {
   constructor(private readonly itemMagicoService: ItemMagicoService) {}
 
-  @Post()
-  async create(@Body() createItemMagicoDto: CreateItemMagicoDto): Promise<ItemMagico> {
-    return this.itemMagicoService.create(createItemMagicoDto);
-  }
-
   @Get()
-  async findAll(): Promise<ItemMagico[]> {
+  findAll(): ItemMagico[] {
     return this.itemMagicoService.findAll();
   }
 
+  @Get(':id')
+  findById(@Param('id') id: string): ItemMagico {
+    return this.itemMagicoService.findById(id);
+  }
+
+  @Post()
+  create(@Body() createItemMagicoDto: CreateItemMagicoDto): ItemMagico {
+    return this.itemMagicoService.create(createItemMagicoDto);
+  }
+
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateItemMagicoDto: Partial<CreateItemMagicoDto>): Promise<ItemMagico> {
+  update(
+    @Param('id') id: string,
+    @Body() updateItemMagicoDto: Partial<CreateItemMagicoDto>,
+  ): ItemMagico {
     return this.itemMagicoService.update(id, updateItemMagicoDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<{ message: string }> {
-    await this.itemMagicoService.remove(id);
+  remove(@Param('id') id: string): { message: string } {
+    this.itemMagicoService.remove(id);
     return { message: `Item mágico com ID ${id} foi removido com sucesso.` };
   }
 }

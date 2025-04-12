@@ -1,30 +1,39 @@
-import { Controller, Get, Query, Post, Body, Put, Param, Delete } from '@nestjs/common';
-import { CreatePersonagemDto } from './create-personagem.dto';
-import { Personagem } from '../interfaces/personagem.interface';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { PersonagemService } from './personagem.service';
+import { CreatePersonagemDto } from './create-personagem.dto';
+import { UpdatePersonagemDto } from './update-personagem.dto'; // Importe o DTO de atualização
+import { Personagem } from '../interfaces/personagem.interface';
 
 @Controller('personagem')
 export class PersonagemController {
   constructor(private readonly personagemService: PersonagemService) {}
 
-  @Post()
-  async create(@Body() createPersonagemDto: CreatePersonagemDto): Promise<Personagem> {
-    return this.personagemService.create(createPersonagemDto);
-  }
-
   @Get()
-  async findAll(): Promise<Personagem[]> {
+  findAll(): Personagem[] {
     return this.personagemService.findAll();
   }
 
+  @Get(':id')
+  findById(@Param('id') id: string): Personagem {
+    return this.personagemService.findById(id);
+  }
+
+  @Post()
+  create(@Body() createPersonagemDto: CreatePersonagemDto): Personagem {
+    return this.personagemService.create(createPersonagemDto);
+  }
+
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updatePersonagemDto: Partial<CreatePersonagemDto>): Promise<Personagem> {
+  update(
+    @Param('id') id: string,
+    @Body() updatePersonagemDto: UpdatePersonagemDto, // Use o DTO de atualização
+  ): Personagem {
     return this.personagemService.update(id, updatePersonagemDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<{ message: string }> {
-    await this.personagemService.remove(id);
+  remove(@Param('id') id: string): { message: string } {
+    this.personagemService.remove(id);
     return { message: `Personagem com ID ${id} foi removido com sucesso.` };
   }
 }

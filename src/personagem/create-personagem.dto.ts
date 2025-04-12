@@ -1,4 +1,6 @@
-import { IsString, IsInt, Min } from 'class-validator';
+import { IsString, IsInt, Min, IsArray, ValidateNested, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateItemMagicoDto } from '../itemMagico/create-itemMagico.dto';
 
 export class CreatePersonagemDto {
   @IsString()
@@ -10,4 +12,10 @@ export class CreatePersonagemDto {
   @IsInt()
   @Min(1)
   nivel: number;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateItemMagicoDto)
+  itens?: CreateItemMagicoDto[];
 }
