@@ -15,6 +15,22 @@ export class PersonagemService {
     private readonly itemMagicoService: ItemMagicoService,
   ) {}
 
+  // Método para calcular os atributos totais (base + itens)
+  private calcularAtributosTotais(personagem: Personagem): { forcaTotal: number; defesaTotal: number } {
+    const totaisItens = personagem.itens.reduce(
+      (acumulador, item: ItemMagico) => ({
+        forcaTotal: acumulador.forcaTotal + item.forca,
+        defesaTotal: acumulador.defesaTotal + item.defesa,
+      }),
+      { forcaTotal: 0, defesaTotal: 0 },
+    );
+
+    return {
+      forcaTotal: personagem.forca + totaisItens.forcaTotal,
+      defesaTotal: personagem.defesa + totaisItens.defesaTotal,
+    };
+  }
+
   create(createPersonagemDto: CreatePersonagemDto): Personagem {
     const { itens, forca, defesa, ...personagemData } = createPersonagemDto;
 
@@ -41,7 +57,11 @@ export class PersonagemService {
   }
 
   findAll(): Personagem[] {
-    return this.personagens;
+    // Para cada personagem, adiciona os atributos totais calculados
+    return this.personagens.map((p) => {
+      const totais = this.calcularAtributosTotais(p);
+      return { ...p, ...totais };
+    });
   }
 
   findById(id: string): Personagem {
@@ -49,7 +69,8 @@ export class PersonagemService {
     if (!personagem) {
       throw new NotFoundException(`Personagem com ID ${id} não encontrado.`);
     }
-    return personagem;
+    const totais = this.calcularAtributosTotais(personagem);
+    return { ...personagem, ...totais };
   }
 
   update(id: string, updateData: UpdatePersonagemDto): Personagem {
@@ -62,6 +83,7 @@ export class PersonagemService {
 
     let itensAtualizados: ItemMagico[] | undefined = undefined;
     if (itens) {
+      // Neste exemplo, novos itens serão criados – se desejar integrações mais sofisticadas, adapte conforme necessário.
       itensAtualizados = itens.map((item) =>
         this.itemMagicoService.create({ ...item, personagemId: id }),
       );

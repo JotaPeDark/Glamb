@@ -1,14 +1,21 @@
-import { IsString } from 'class-validator';
+import { IsString, IsInt, Min, Max } from 'class-validator';
 
 export class CreateItemMagicoDto {
   @IsString()
   nome: string;
 
   @IsString()
-  raridade: string;
+  tipo: 'Arma' | 'Armadura' | 'Amuleto';
 
-  @IsString()
-  descricao: string;
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  forca: number;
+
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  defesa: number;
 
   @IsString()
   personagemId: string;

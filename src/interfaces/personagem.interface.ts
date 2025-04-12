@@ -8,4 +8,6 @@ export interface Personagem {
   forca: number;
   defesa: number;
   itens: ItemMagico[];
+  forcaTotal?: number;
+  defesaTotal?: number;
 }
