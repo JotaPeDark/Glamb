@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { Personagem } from '../interfaces/personagem.interface';
 import { ItemMagico } from '../interfaces/itemMagico.interface';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,8 +16,19 @@ export class PersonagemService {
   ) {}
 
   create(createPersonagemDto: CreatePersonagemDto): Personagem {
-    const { itens, ...personagemData } = createPersonagemDto;
-    const novoPersonagem: Personagem = { id: uuidv4(), ...personagemData, itens: [] };
+    const { itens, forca, defesa, ...personagemData } = createPersonagemDto;
+
+    if (forca + defesa > 10) {
+      throw new BadRequestException('A soma de Força e Defesa não pode ultrapassar 10 pontos.');
+    }
+
+    const novoPersonagem: Personagem = {
+      id: uuidv4(),
+      ...personagemData,
+      forca,
+      defesa,
+      itens: [],
+    };
 
     if (itens && itens.length > 0) {
       novoPersonagem.itens = itens.map((item) =>
