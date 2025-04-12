@@ -1,30 +1,30 @@
-
 import { Controller, Get, Query, Post, Body, Put, Param, Delete } from '@nestjs/common';
-import { CreatePersonagemDto } from './personagem.dto';
+import { CreatePersonagemDto } from './create-personagem.dto';
 import { Personagem } from '../interfaces/personagem.interface';
 import { PersonagemService } from './personagem.service';
 
-@Controller('Personagem')
+@Controller('personagem')
 export class PersonagemController {
-  constructor(private PersonagemsService: PersonagemService) {}
+  constructor(private readonly personagemService: PersonagemService) {}
 
   @Post()
-  async create(@Body() createPersonagemDto: CreatePersonagemDto) {
-    this.PersonagemsService.create(createPersonagemDto);
+  async create(@Body() createPersonagemDto: CreatePersonagemDto): Promise<Personagem> {
+    return this.personagemService.create(createPersonagemDto);
   }
 
   @Get()
   async findAll(): Promise<Personagem[]> {
-    return this.PersonagemsService.findAll();
+    return this.personagemService.findAll();
   }
 
   @Put(':id')
-  update(@Param('id') id: string) {
-    return `This action updates a #${id} Personagem`;
+  async update(@Param('id') id: string, @Body() updatePersonagemDto: Partial<CreatePersonagemDto>): Promise<Personagem> {
+    return this.personagemService.update(id, updatePersonagemDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} Personagem`;
+  async remove(@Param('id') id: string): Promise<{ message: string }> {
+    await this.personagemService.remove(id);
+    return { message: `Personagem com ID ${id} foi removido com sucesso.` };
   }
 }
