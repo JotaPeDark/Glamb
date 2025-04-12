@@ -11,16 +11,14 @@ export class PersonagemService {
   private readonly personagens: Personagem[] = [];
 
   constructor(
-    @Inject(forwardRef(() => ItemMagicoService)) // Use forwardRef para resolver a circularidade
+    @Inject(forwardRef(() => ItemMagicoService))
     private readonly itemMagicoService: ItemMagicoService,
   ) {}
 
-  // Cria um novo personagem
   create(createPersonagemDto: CreatePersonagemDto): Personagem {
     const { itens, ...personagemData } = createPersonagemDto;
     const novoPersonagem: Personagem = { id: uuidv4(), ...personagemData, itens: [] };
 
-    // Adiciona os itens mágicos, se fornecidos
     if (itens && itens.length > 0) {
       novoPersonagem.itens = itens.map((item) =>
         this.itemMagicoService.create({ ...item, personagemId: novoPersonagem.id }),
@@ -31,12 +29,10 @@ export class PersonagemService {
     return novoPersonagem;
   }
 
-  // Retorna todos os personagens
   findAll(): Personagem[] {
     return this.personagens;
   }
 
-  // Retorna um personagem específico pelo ID
   findById(id: string): Personagem {
     const personagem = this.personagens.find((p) => p.id === id);
     if (!personagem) {
@@ -45,7 +41,6 @@ export class PersonagemService {
     return personagem;
   }
 
-  // Atualiza um personagem existente
   update(id: string, updateData: UpdatePersonagemDto): Personagem {
     const personagemIndex = this.personagens.findIndex((p) => p.id === id);
     if (personagemIndex === -1) {
@@ -54,7 +49,6 @@ export class PersonagemService {
 
     const { itens, ...resto } = updateData;
 
-    // Processa os itens mágicos, se fornecidos
     let itensAtualizados: ItemMagico[] | undefined = undefined;
     if (itens) {
       itensAtualizados = itens.map((item) =>
@@ -65,14 +59,13 @@ export class PersonagemService {
     const personagemAtualizado: Personagem = {
       ...this.personagens[personagemIndex],
       ...resto,
-      itens: itensAtualizados ?? this.personagens[personagemIndex].itens, // Mantém os itens existentes se não forem atualizados
+      itens: itensAtualizados ?? this.personagens[personagemIndex].itens,
     };
 
     this.personagens[personagemIndex] = personagemAtualizado;
     return personagemAtualizado;
   }
 
-  // Remove um personagem pelo ID
   remove(id: string): void {
     const personagemIndex = this.personagens.findIndex((p) => p.id === id);
     if (personagemIndex === -1) {

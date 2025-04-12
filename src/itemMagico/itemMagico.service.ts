@@ -9,7 +9,7 @@ export class ItemMagicoService {
   private readonly itensMagicos: ItemMagico[] = [];
 
   constructor(
-    @Inject(forwardRef(() => PersonagemService)) // Use forwardRef para resolver a circularidade
+    @Inject(forwardRef(() => PersonagemService))
     private readonly personagemService: PersonagemService,
   ) {}
 
@@ -36,12 +36,10 @@ export class ItemMagicoService {
     return novoItem;
   }
 
-    // Retorna todos os itens mágicos
     findAll(): ItemMagico[] {
         return this.itensMagicos;
     }
 
-    // Retorna um item mágico específico pelo ID
     findById(id: string): ItemMagico {
         const item = this.itensMagicos.find((i) => i.id === id);
         if (!item) {
@@ -50,7 +48,6 @@ export class ItemMagicoService {
         return item;
     }
 
-    // Atualiza um item mágico existente
     update(id: string, updateData: Partial<CreateItemMagicoDto>): ItemMagico {
         const itemIndex = this.itensMagicos.findIndex((i) => i.id === id);
         if (itemIndex === -1) {
@@ -59,7 +56,6 @@ export class ItemMagicoService {
 
         const { personagemId, ...item } = updateData;
 
-        // Verifica se o personagemId foi fornecido durante a atualização
         if (personagemId === undefined) {
             throw new BadRequestException('O personagemId é obrigatório ao atualizar um item mágico.');
         }
@@ -74,7 +70,6 @@ export class ItemMagicoService {
         return itemAtualizado;
     }
 
-    // Remove um item mágico pelo ID
     remove(id: string): void {
         const itemIndex = this.itensMagicos.findIndex((i) => i.id === id);
         if (itemIndex === -1) {

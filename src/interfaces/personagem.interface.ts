@@ -5,5 +5,5 @@ export interface Personagem {
   nome: string;
   classe: string;
   nivel: number;
-  itens?: ItemMagico[]; // Lista de itens mágicos associados ao personagem
+  itens?: ItemMagico[];
 }

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { PersonagemService } from './personagem.service';
 import { CreatePersonagemDto } from './create-personagem.dto';
-import { UpdatePersonagemDto } from './update-personagem.dto'; // Importe o DTO de atualização
+import { UpdatePersonagemDto } from './update-personagem.dto';
 import { Personagem } from '../interfaces/personagem.interface';
 
 @Controller('personagem')
@@ -26,7 +26,7 @@ export class PersonagemController {
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() updatePersonagemDto: UpdatePersonagemDto, // Use o DTO de atualização
+    @Body() updatePersonagemDto: UpdatePersonagemDto,
   ): Personagem {
     return this.personagemService.update(id, updatePersonagemDto);
   }

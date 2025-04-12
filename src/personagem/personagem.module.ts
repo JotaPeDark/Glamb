@@ -4,9 +4,9 @@ import { PersonagemController } from './personagem.controller';
 import { ItemMagicoModule } from '../itemMagico/itemMagico.module';
 
 @Module({
-  imports: [forwardRef(() => ItemMagicoModule)], // Use forwardRef para evitar circularidade
+  imports: [forwardRef(() => ItemMagicoModule)],
   controllers: [PersonagemController],
   providers: [PersonagemService],
-  exports: [PersonagemService], // Exporte o serviço para que outros módulos possam usá-lo
+  exports: [PersonagemService],
 })
 export class PersonagemModule {}
