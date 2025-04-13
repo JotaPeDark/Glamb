@@ -9,4 +9,4 @@ import { PersonagemModule } from '../personagem/personagem.module';
   providers: [ItemMagicoService],
   exports: [ItemMagicoService],
 })
-export class ItemMagicoModule {}
+export class ItemMagicoModule { }

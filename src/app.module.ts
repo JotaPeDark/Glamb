@@ -5,4 +5,4 @@ import { ItemMagicoModule } from './itemMagico/itemMagico.module';
 @Module({
   imports: [PersonagemModule, ItemMagicoModule],
 })
-export class AppModule {}
+export class AppModule { }

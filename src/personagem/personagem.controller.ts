@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { PersonagemService } from './personagem.service';
 import { CreatePersonagemDto } from './create-personagem.dto';
-import { UpdatePersonagemDto } from './update-personagem.dto';
 import { Personagem } from '../interfaces/personagem.interface';
+import { ItemMagico } from '../interfaces/itemMagico.interface';
 
 @Controller('personagem')
 export class PersonagemController {
-  constructor(private readonly personagemService: PersonagemService) {}
+  constructor(private readonly personagemService: PersonagemService) { }
 
   @Get()
   findAll(): Personagem[] {
@@ -23,12 +23,22 @@ export class PersonagemController {
     return this.personagemService.create(createPersonagemDto);
   }
 
-  @Put(':id')
-  update(
+  @Put(':id/nome-aventureiro')
+  updateNomeAventureiro(
     @Param('id') id: string,
-    @Body() updatePersonagemDto: UpdatePersonagemDto,
+    @Body('nomeAventureiro') nomeAventureiro: string,
   ): Personagem {
-    return this.personagemService.update(id, updatePersonagemDto);
+    return this.personagemService.updateNomeAventureiro(id, nomeAventureiro);
+  }
+
+  @Get(':id/itens')
+  listarItensMagicos(@Param('id') id: string): ItemMagico[] {
+    return this.personagemService.listarItensMagicos(id);
+  }
+
+  @Get(':id/amuleto')
+  buscarAmuleto(@Param('id') id: string): ItemMagico {
+    return this.personagemService.buscarAmuleto(id);
   }
 
   @Delete(':id')

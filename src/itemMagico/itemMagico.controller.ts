@@ -5,7 +5,7 @@ import { ItemMagico } from '../interfaces/itemMagico.interface';
 
 @Controller('item-magico')
 export class ItemMagicoController {
-  constructor(private readonly itemMagicoService: ItemMagicoService) {}
+  constructor(private readonly itemMagicoService: ItemMagicoService) { }
 
   @Get()
   findAll(): ItemMagico[] {

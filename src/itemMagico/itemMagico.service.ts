@@ -11,7 +11,7 @@ export class ItemMagicoService {
   constructor(
     @Inject(forwardRef(() => PersonagemService))
     private readonly personagemService: PersonagemService,
-  ) {}
+  ) { }
 
   private validarItem(item: CreateItemMagicoDto, personagemId: string): void {
     const { tipo, forca, defesa } = item;
